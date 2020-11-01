@@ -18,7 +18,6 @@ var sectionFavoris = document.getElementById("liste-favoris");
 
 var gifLoading = document.getElementById("bloc-gif-attente");
 
-var booleanGif = false;
 //change page
 //URL &page=1
 
@@ -33,9 +32,9 @@ function contains(a, obj) {
         }
     }
   }
-
     return false;
 }
+
 function indexOF(a, obj) {
     for (var i = 0; i < a.length; i++) {
         if (a[i].toString()==obj.toString()) {
@@ -155,12 +154,6 @@ function ajax_get_request(callback, url) {
         xhr.send();
 }
 
-function anniverGif(){
-  booleanGif = !booleanGif;
-  while(booleanGif){
-
-  }
-}
 
 //fonction pour la creation de la division contenant tous les resultats
 function afficherResult(elem){
@@ -179,7 +172,6 @@ function afficherResult(elem){
     divResultat.appendChild(titre);
   }
   else{
-    console.log(obj);
     for(let a = 0; a<obj.results.length; a++){
       var objetFilm = obj.results[a];
       if(objetFilm.overview != ""){
