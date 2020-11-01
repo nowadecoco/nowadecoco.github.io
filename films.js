@@ -37,13 +37,15 @@ function contains(a, obj) {
 
 function indexOF(a, obj) {
     for (var i = 0; i < a.length; i++) {
-        if (a[i].toString()==obj.toString()) {
+
+        if (a[i].toString()==obj) {
             return i;
         }
     }
     return 0;
 }
 function removeFav(item){
+
   var numeroIndex = indexOF(favorisHistorique,item);
   favorisHistorique.splice(numeroIndex,1);
   window.localStorage.removeItem('favorisHistorique');
@@ -57,7 +59,7 @@ function removeFav(item){
 function rechercheAvance(item){
   film.value = item.textContent;
   imgFav.src = "images/etoile-pleine.svg";
-  favoris.setAttribute('onclick','removeFav('+item.textContent.toString()+')');
+  favoris.setAttribute('onclick','removeFav("'+item.textContent.toString()+'")');
   favoris.removeAttribute("disabled");
   favoris.className = 'btn_clicable';
   recherche();
@@ -81,7 +83,7 @@ function loadFavoris(){
       imageSpan.alt = "Icone pour supprimer le favori";
       imageSpan.width = 15;
       imageSpan.title = "Cliquer pour supprimer le favori";
-      imageSpan.setAttribute("onclick","removeFav("+favorisHistorique[a].toString()+")");
+      imageSpan.setAttribute("onclick","removeFav('"+favorisHistorique[a].toString()+"')");
 
       divSpan.appendChild(span);
       divSpan.appendChild(imageSpan);
@@ -103,13 +105,13 @@ function putfav(){
   if(favorisHistorique != null){
     favorisHistorique[favorisHistorique.length] = itemFav;
     imgFav.src = "images/etoile-pleine.svg";
-    favoris.setAttribute('onclick','removeFav('+itemFav+')');
+    favoris.setAttribute('onclick','removeFav("'+itemFav.toString()+'")');
     favoris.removeAttribute("disabled");
   }else{
     favorisHistorique = [];
     favorisHistorique[0] = itemFav;
     imgFav.src = "images/etoile-pleine.svg";
-    favoris.setAttribute('onclick','removeFav('+itemFav+')');
+    favoris.setAttribute('onclick','removeFav("'+itemFav.toString()+'")');
     favoris.removeAttribute("disabled");
   }
   window.localStorage.removeItem('favorisHistorique');
@@ -124,7 +126,7 @@ film.addEventListener('input', evt => {
     if(contains(favorisHistorique,film.value)){
       imgFav.src = "images/etoile-pleine.svg";
       favoris.removeAttribute("disabled");
-      favoris.setAttribute('onclick','removeFav('+film.value+')');
+      favoris.setAttribute('onclick','removeFav("'+film.value.toString()+'")');
     }else{
       favoris.className = 'btn_clicable';
       favoris.removeAttribute("disabled");
