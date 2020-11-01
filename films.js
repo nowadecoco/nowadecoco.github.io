@@ -57,7 +57,7 @@ function removeFav(item){
 function rechercheAvance(item){
   film.value = item.textContent;
   imgFav.src = "images/etoile-pleine.svg";
-  favoris.setAttribute('onclick','removeFav('+item.textContent+')');
+  favoris.setAttribute('onclick','removeFav('+item.textContent.toString()+')');
   favoris.removeAttribute("disabled");
   favoris.className = 'btn_clicable';
   recherche();
