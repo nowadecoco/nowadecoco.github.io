@@ -186,14 +186,31 @@ p#explication {
 	padding: 10px;
 	margin-top: 10px;
 	margin-bottom: 10px;
-}
-
-.decription_photo{
 	display: flex;
 	flex-direction: row;
 }
 
-.decription_photo>img{
+.film>img{
 	border-radius: 45px;
  	padding: 30px;
+}
+
+.film>div{
+	width: 100%;
+}
+
+.film>div>h2{
+	text-align: center;
+}
+.film>div>div{
+	display: flex;
+	flex-direction: row;
+}
+.film>div>div>div{
+	display: flex;
+	flex-direction: row;
+	padding-left: 25px;
+}
+.film>div>div>div>img{
+	width: 22px;
 }

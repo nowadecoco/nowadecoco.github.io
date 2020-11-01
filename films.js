@@ -38,8 +38,8 @@ function contains(a, obj) {
 }
 function indexOF(a, obj) {
     for (var i = 0; i < a.length; i++) {
-        if (a[i] === obj) {
-            return a;
+        if (a[i].toString()==obj.toString()) {
+            return i;
         }
     }
     return 0;
@@ -58,7 +58,7 @@ function removeFav(item){
 function rechercheAvance(item){
   film.value = item.textContent;
   imgFav.src = "images/etoile-pleine.svg";
-  favoris.setAttribute('onclick','removeFav()');
+  favoris.setAttribute('onclick','removeFav('+item.textContent+')');
   favoris.removeAttribute("disabled");
   favoris.className = 'btn_clicable';
   recherche();
@@ -82,7 +82,7 @@ function loadFavoris(){
       imageSpan.alt = "Icone pour supprimer le favori";
       imageSpan.width = 15;
       imageSpan.title = "Cliquer pour supprimer le favori";
-      imageSpan.setAttribute("onclick","removeFav(this)");
+      imageSpan.setAttribute("onclick","removeFav("+favorisHistorique[a].toString()+")");
 
       divSpan.appendChild(span);
       divSpan.appendChild(imageSpan);
@@ -104,13 +104,13 @@ function putfav(){
   if(favorisHistorique != null){
     favorisHistorique[favorisHistorique.length] = itemFav;
     imgFav.src = "images/etoile-pleine.svg";
-    favoris.setAttribute('onclick','removeFav()');
+    favoris.setAttribute('onclick','removeFav('+itemFav+')');
     favoris.removeAttribute("disabled");
   }else{
     favorisHistorique = [];
     favorisHistorique[0] = itemFav;
     imgFav.src = "images/etoile-pleine.svg";
-    favoris.setAttribute('onclick','removeFav()');
+    favoris.setAttribute('onclick','removeFav('+itemFav+')');
     favoris.removeAttribute("disabled");
   }
   window.localStorage.removeItem('favorisHistorique');
@@ -125,7 +125,7 @@ film.addEventListener('input', evt => {
     if(contains(favorisHistorique,film.value)){
       imgFav.src = "images/etoile-pleine.svg";
       favoris.removeAttribute("disabled");
-      favoris.setAttribute('onclick','removeFav()');
+      favoris.setAttribute('onclick','removeFav('+film.value+')');
     }else{
       favoris.className = 'btn_clicable';
       favoris.removeAttribute("disabled");
@@ -179,52 +179,53 @@ function afficherResult(elem){
     divResultat.appendChild(titre);
   }
   else{
+    console.log(obj);
     for(let a = 0; a<obj.results.length; a++){
-      //boolean pour verifier de la pertinence de l'affichage d'un objet
-      // exemple : un film sans description n'a que peu d'importance pour le projet ici
-      var publicationOK = true;
-      //recupération du film à l'indice A
       var objetFilm = obj.results[a];
-      // creation des premiers elements description et image du film
-      var description = document.createElement('p');
-      var image = document.createElement('img');
-      //verification qu'une image existe pour le film à afficher, sinon afficher une image default
-      if(objetFilm.poster_path != null){
-        image.src = 'https://image.tmdb.org/t/p/w154'+objetFilm.poster_path.toString();
-      }else{
-        image.src = 'images/imageNot.jpg';
-      }
-      // verification de la pertinence
-      // ici comparaison avec une chaine vide et non null car l'API ne renvoie pas null pour une description vide
       if(objetFilm.overview != ""){
-        description.textContent = objetFilm.overview.toString();
-      }else{
-        publicationOK = false;
-      }
-      //creation de la division contenant la description et l'image
-      //plus simple pour la gestion du CSS associé
-      var divDescrip = document.createElement('div');
-      divDescrip.className = "decription_photo";
-      //ajout des elements dans la division
-      divDescrip.appendChild(image);
-      divDescrip.appendChild(description);
-      //creation de l'element contenant le titre du film
-      var titre = document.createElement('h4');
-      titre.textContent = objetFilm.title.toString();
-      //creation d'une balise lien contenant l'intégralité des informations ci dessus
-      //simple balise pour faire une eventuelle partie suplémentaire sur le site
-      var lienFilm = document.createElement('a');
-      lienFilm.appendChild(titre);
-      lienFilm.appendChild(divDescrip);
-      //**simple idée**
-      //lienFilm.href = "film.html?id="+objetFilm.id.toString()+"&film="+film.value;
-      lienFilm.className = "lienFilm";
-      var classFilm = document.createElement('div');
-      classFilm.className = "film";
-      classFilm.appendChild(lienFilm);
-      //verifier que le film peut etre ajouter, pertinence
-      if(publicationOK){
-        //ajouter le film en bas de la liste existente
+        var overview = document.createElement('p');
+        overview.textContent = "Overview : "+objetFilm.overview.toString();
+        var releaseDate = document.createElement('p');
+        releaseDate.textContent = "Release date : "+objetFilm.release_date.toString();
+        var starsRating = objetFilm.vote_average;
+        var titleMovie = document.createElement('h2');
+        titleMovie.textContent = objetFilm.original_title;
+        var urlImage = (objetFilm.poster_path != null)?('https://image.tmdb.org/t/p/w154'+objetFilm.poster_path.toString()):'images/imageNot.jpg';
+        var imageComplete = document.createElement('img');
+        imageComplete.src = urlImage;
+
+        var informationsDiv = document.createElement('div');
+        informationsDiv.appendChild(titleMovie);
+
+        var complementaireInfo = document.createElement('div');
+        complementaireInfo.appendChild(releaseDate);
+        var divStars = document.createElement('div');
+        var starsRateP = document.createElement('p');
+        starsRateP.textContent = "Rate : ";
+        divStars.appendChild(starsRateP);
+        if(objetFilm.vote_count == 0){
+          starsRateP.textContent = "Rate : Not Rated";
+        }else{
+          var nbEtoile = Math.round(starsRating/2);
+          var nbEtoileVide = 5-nbEtoile;
+          for(var i = 0; i<nbEtoile;i++){
+            var imageEtoile = document.createElement('img');
+            imageEtoile.src = "images/etoile-pleine.svg";
+            divStars.appendChild(imageEtoile);
+          }
+          for(var i = 0; i<nbEtoileVide;i++){
+            var imageEtoile = document.createElement('img');
+            imageEtoile.src = "images/etoile-vide.svg";
+            divStars.appendChild(imageEtoile);
+          }
+        }
+        complementaireInfo.appendChild(divStars);
+        informationsDiv.appendChild(complementaireInfo);
+        informationsDiv.appendChild(overview);
+        var classFilm = document.createElement('div');
+        classFilm.className = "film";
+        classFilm.appendChild(imageComplete);
+        classFilm.appendChild(informationsDiv);
         divResultat.appendChild(classFilm);
       }
     }
