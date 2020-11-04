@@ -229,6 +229,7 @@ function afficherResult(elem){
             imageEtoile.src = "images/etoile-vide.svg";
             divStars.appendChild(imageEtoile);
           }
+          divStars.title = starsRating+'/10';
         }
 
 
