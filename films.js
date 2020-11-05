@@ -243,10 +243,10 @@ function afficherResult(elem){
         classFilm.appendChild(imageComplete);
         classFilm.appendChild(informationsDiv);
         divResultat.appendChild(classFilm);
-        rechercheEnCours = false;
       }
     }
   }
+  rechercheEnCours = false;
 }
 
 function recherche(){
