@@ -179,6 +179,7 @@ function ajax_get_request(callback, url) {
 
 //fonction pour la creation de la division contenant tous les resultats
 function afficherResult(elem){
+  rechercheEnCours = false;
   //enlever l'affichage du svg de chargement
   gifLoading.removeAttribute("style");
   //elem retourner de l'appel ajax, transformation en objet JSON pour pouvoir l'exploiter
@@ -197,7 +198,13 @@ function afficherResult(elem){
         var overview = document.createElement('p');
         overview.textContent = "Overview : "+objetFilm.overview.toString();
         var releaseDate = document.createElement('p');
-        releaseDate.textContent = "Release date : "+objetFilm.release_date.toString();
+        if (objetFilm.release_date == null){
+          releaseDate.textContent = "Release date : date not specified";
+
+        }else{
+          releaseDate.textContent = "Release date : "+objetFilm.release_date.toString();
+
+        }
         var starsRating = objetFilm.vote_average;
         var titleMovie = document.createElement('h2');
         titleMovie.textContent = objetFilm.original_title;
@@ -246,7 +253,6 @@ function afficherResult(elem){
       }
     }
   }
-  rechercheEnCours = false;
 }
 
 function recherche(){
