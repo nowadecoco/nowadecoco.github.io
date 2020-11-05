@@ -20,6 +20,8 @@ var sectionFavoris = document.getElementById("liste-favoris");
 var gifLoading = document.getElementById("bloc-gif-attente");
 //tableau des favoris
 var favorisHistorique = [];
+//boolean permettant d'eviter un bug lié au spam de recherche
+var rechercheEnCours = false;
 
 // rechercher dans un objet(tableau) si un élément existe
 function contains(a, obj) {
@@ -241,6 +243,7 @@ function afficherResult(elem){
         classFilm.appendChild(imageComplete);
         classFilm.appendChild(informationsDiv);
         divResultat.appendChild(classFilm);
+        rechercheEnCours = false;
       }
     }
   }
@@ -249,16 +252,20 @@ function afficherResult(elem){
 function recherche(){
   //url de l'api pour l'appel ajax
   var url = "https://api.themoviedb.org/3/search/movie?api_key="+apikey+"&query=" + film.value;
-
-  gifLoading.setAttribute("style","display:block");
-  while (divResultat.firstChild) {
-    divResultat.removeChild(divResultat.lastChild);
+  //eviter le spam de l'api
+  if(rechercheEnCours == false){
+    rechercheEnCours = true;
+    gifLoading.setAttribute("style","display:block");
+    while (divResultat.firstChild) {
+      divResultat.removeChild(divResultat.lastChild);
+    }
+    //appel ajax asynchrone
+    //delay pour voir le gif d'attente (API trop reactive et connexion trop bonne pour le voir sinon)
+    setTimeout(() => { ajax_get_request(afficherResult,url); }, 2000);
+    //faire l'appel ajax ci dessous pour une vraie utilisation
+    //ajax_get_request(afficherResult,url);
   }
-  //appel ajax asynchrone
-  //delay pour voir le gif d'attente (API trop reactive et connexion trop bonne pour le voir sinon)
-  setTimeout(() => { ajax_get_request(afficherResult,url); }, 2000);
-  //faire l'appel ajax ci dessous pour une vraie utilisation
-  //ajax_get_request(afficherResult,url);
+
 }
 
 //ajout du listener permettant de faire une recherche directement avec la touche entrer
